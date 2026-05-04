@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-card">
+  <h2>How It Works</h2>
+  <p>This recommender takes the MovieLens dataset and turns each movie into a rich text profile by combining title, genres, movie tags, and optional overview metadata. The goal is to capture what each movie is about in a way that a machine can compare quickly.</p>
+  <p>Every movie record is cleaned, normalized, and tokenized so similar words and titles are compared consistently. The text for each movie is then transformed into a TF-IDF vector, which gives higher value to important keywords and reduces the impact of common words.</p>
+  <p>When you search for a movie, the app finds the movie in the dataset, then uses cosine similarity to compare its vector against all other movies. The best matches are the movies whose metadata is most closely aligned with the query movie in genre, tone, and user tag context.</p>
+</section>
+
+<section class="analysis-details">
+  <h3>Pipeline Overview</h3>
+  <ul>
+    <li>Load and preprocess MovieLens or Bollywood movie metadata</li>
+    <li>Normalize titles and clean genre labels</li>
+    <li>Aggregate user tags for each movie to enrich descriptions</li>
+    <li>Construct a combined movie metadata field for every film</li>
+    <li>Preprocess text with lowercasing, punctuation removal, and filtering</li>
+    <li>Build TF-IDF vectors using unigram and bigram features</li>
+    <li>Compute cosine similarity between the selected movie and all others</li>
+    <li>Return the top recommendations sorted by similarity score</li>
+  </ul>
+</section>
+
+<section class="analysis-details">
+  <h3>Why this approach works</h3>
+  <p>This is a content-based recommender, so it does not need user ratings to suggest movies. Instead, it relies on the shared movie description and metadata. That means it can recommend newer or less-rated movies as long as their text profile is meaningful.</p>
+  <p>The model is especially strong when movie similarity is driven by genre, keywords, and tag-based themes—so films like action thrillers, romantic comedies, or cult classics are easier to match accurately.</p>
+</section>
+{% endblock %}

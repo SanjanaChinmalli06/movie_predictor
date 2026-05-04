@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <h1>Discover Your Next Favorite Movie</h1>
+  <p>Unlock cinematic treasures with our intelligent recommender! Dive into personalized movie suggestions powered by advanced content analysis, stunning visualizations, and real-time predictions from MovieLens and Bollywood datasets.</p>
+  <a href="{{ url_for('predictor') }}" class="cta-button">Start Exploring Movies</a>
+</section>
+
+<section class="home-cards">
+  <div class="card">
+    <h3>🎬 Smart Recommendations</h3>
+    <p>Get instant, personalized movie suggestions based on genres, tags, and themes. Whether you're into thrillers, comedies, or classics, our AI finds your perfect match.</p>
+  </div>
+  <div class="card">
+    <h3>📊 Data-Driven Insights</h3>
+    <p>Explore interactive charts and analytics that reveal movie trends, genre popularity, and dataset statistics. See what makes movies tick!</p>
+  </div>
+  <div class="card">
+    <h3>🔍 Real-Time Predictor</h3>
+    <p>Type any movie title and watch as our system delivers tailored recommendations in seconds. Switch between MovieLens and Bollywood for global variety.</p>
+  </div>
+  <div class="card">
+    <h3>📈 Performance Metrics</h3>
+    <p>Check out accuracy benchmarks, top-rated films, and model performance. Understand how our recommender stacks up against real user preferences.</p>
+  </div>
+</section>
+
+<section class="section-card">
+  <h2>Why Choose Our Recommender?</h2>
+  <p>Built with cutting-edge machine learning techniques, our system analyzes movie metadata to deliver recommendations that feel personal and exciting. No user ratings required—just pure content magic!</p>
+  <ul>
+    <li>Content-based matching for fresh, unbiased suggestions</li>
+    <li>Support for multiple datasets including Bollywood films</li>
+    <li>Beautiful visualizations and easy-to-use interface</li>
+    <li>Open-source and transparent methodology</li>
+  </ul>
+</section>
+{% endblock %}
+

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="accuracy-card">
+  <h2>Model Accuracy</h2>
+  <p>The accuracy figure below is a precision-style measure based on how often the recommender suggests titles that match users' high-rated movies.</p>
+  <div class="metrics-list">
+    <div class="metric-item"><strong>Accuracy:</strong> {{ accuracy }}%</div>
+    <div class="metric-item"><strong>Evaluation method:</strong> sample users with high ratings and count how many recommended films matched their preferences.</div>
+  </div>
+  <canvas id="accuracy-chart" width="700" height="320"></canvas>
+</section>
+
+<script>
+new Chart(document.getElementById('accuracy-chart'), {
+  type: 'bar',
+  data: {
+    labels: ['Accuracy'],
+    datasets: [{
+      label: 'Precision (%)',
+      data: [{{ accuracy }}],
+      backgroundColor: 'rgba(56, 189, 248, 0.9)',
+      borderColor: 'rgba(56, 189, 248, 1)',
+      borderWidth: 2,
+      borderRadius: 10,
+      barThickness: 80
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 100,
+        ticks: { stepSize: 10 }
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: true }
+    }
+  }
+});
+</script>
+{% endblock %}

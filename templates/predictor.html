@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+<section class="card">
+  <h2>Real-time Predictor</h2>
+  <p>Type a movie title and get instant recommendations from the content-based model.</p>
+  <form id="recommend-form">
+    <div class="form-grid">
+      <input type="text" id="movie-title" placeholder="Enter a movie title like Toy Story" />
+      <select id="dataset-select">
+        {% for dataset in datasets %}
+        <option value="{{ dataset.key }}">{{ dataset.label }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Get Recommendations</button>
+    </div>
+  </form>
+</section>
+
+<section class="card" id="recommendation-result">
+  <h3>Results</h3>
+  <div id="recommendation-list">
+    <p>Enter a title and hit submit to see recommendations.</p>
+  </div>
+</section>
+
+<script>
+const form = document.getElementById('recommend-form');
+const resultList = document.getElementById('recommendation-list');
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const title = document.getElementById('movie-title').value.trim();
+  if (!title) {
+    resultList.innerHTML = '<p>Please enter a movie title.</p>';
+    return;
+  }
+  
+  resultList.innerHTML = '<p>Loading recommendations…</p>';
+  
+  try {
+    const dataset = document.getElementById('dataset-select').value;
+    const response = await fetch(`/recommend?title=${encodeURIComponent(title)}&dataset=${encodeURIComponent(dataset)}`);
+    const data = await response.json();
+    if (!response.ok) {
+      resultList.innerHTML = `<p>${data.error || 'Unable to fetch recommendations.'}</p>`;
+      return;
+    }
+
+    const items = data.recommendations.map((rec, idx) => {
+      const ratingDisplay = rec.imdb_rating && rec.imdb_rating !== 'N/A' ? `<br/><small>IMDb: ${rec.imdb_rating}</small>` : '';
+      return `<div class="result-item"><strong>${idx + 1}. ${rec.title}</strong><br/><span>${rec.genres}</span><br/><small>Score: ${rec.score.toFixed(3)}</small>${ratingDisplay}</div>`;
+    });
+    resultList.innerHTML = items.join('');
+  } catch (error) {
+    resultList.innerHTML = '<p>Network error while requesting recommendations.</p>';
+  }
+});
+</script>
+</div>
+{% endblock %}

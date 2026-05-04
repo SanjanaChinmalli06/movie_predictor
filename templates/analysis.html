@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section-card">
+  <h2>Dataset Analysis</h2>
+  <p>Explore the dataset with visual insights for MovieLens and optional Bollywood data.</p>
+</section>
+
+<section class="analysis-grid">
+  <div class="card">
+    <h3>Dataset Overview</h3>
+    <p><strong>{{ summary.num_movies }}</strong> movies<br/><strong>{{ summary.num_ratings }}</strong> ratings<br/><strong>{{ summary.num_tags }}</strong> tags</p>
+  </div>
+  <div class="card">
+    <h3>Top Rated Movies</h3>
+    <ol>
+      {% for movie in summary.top_rated %}
+      <li>{{ movie.title }} <span class="muted">({{ movie.genres }})</span></li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="section-card">
+  <h3>Top Genres</h3>
+  <canvas id="genres-chart" width="800" height="360"></canvas>
+</section>
+
+{% if bollywood_summary %}
+<section class="section-card">
+  <h2>Bollywood Dataset Insights</h2>
+</section>
+<section class="analysis-grid">
+  <div class="card">
+    <h3>Bollywood Movie Count</h3>
+    <p><strong>{{ bollywood_summary.num_movies }}</strong> movies</p>
+  </div>
+  <div class="card">
+    <h3>Bollywood Genre Distribution</h3>
+    <canvas id="bollywood-genres-chart" width="800" height="360"></canvas>
+  </div>
+</section>
+{% endif %}
+
+<script>
+const genreLabels = {{ summary.top_genres | map(attribute='name') | list | tojson }};
+const genreCounts = {{ summary.top_genres | map(attribute='count') | list | tojson }};
+new Chart(document.getElementById('genres-chart'), {
+  type: 'bar',
+  data: {
+    labels: genreLabels,
+    datasets: [{
+      label: 'Genre frequency',
+      data: genreCounts,
+      backgroundColor: 'rgba(56, 189, 248, 0.85)',
+      borderColor: 'rgba(56, 189, 248, 1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true }
+    },
+    plugins: {
+      legend: { display: false }
+    }
+  }
+});
+
+{% if bollywood_summary %}
+const bollywoodGenreLabels = {{ bollywood_summary.top_genres | map(attribute='name') | list | tojson }};
+const bollywoodGenreCounts = {{ bollywood_summary.top_genres | map(attribute='count') | list | tojson }};
+new Chart(document.getElementById('bollywood-genres-chart'), {
+  type: 'bar',
+  data: {
+    labels: bollywoodGenreLabels,
+    datasets: [{
+      label: 'Bollywood genre frequency',
+      data: bollywoodGenreCounts,
+      backgroundColor: 'rgba(52, 211, 153, 0.82)',
+      borderColor: 'rgba(52, 211, 153, 1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true }
+    },
+    plugins: {
+      legend: { display: false }
+    }
+  }
+});
+{% endif %}
+</script>
+{% endblock %}
